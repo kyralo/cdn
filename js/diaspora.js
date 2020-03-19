@@ -303,6 +303,9 @@ $(function() {
             e.preventDefault()
         }
     })
+
+
+    var typed = null;
     $('body').on('click', function(e) {
         var tag = $(e.target).attr('class') || '',
             rel = $(e.target).attr('rel') || '';
@@ -315,7 +318,32 @@ $(function() {
             // nav menu
             case (tag.indexOf('switchmenu') != -1):
                 window.scrollTo(0, 0)
+
                 $('html, body').toggleClass('mu');
+                if(typed !== null)
+                    {typed.destroy(); typed = null;}
+                else{
+                    if($("#hitokoto").data('st') == true){
+                        $.get("https://v1.hitokoto.cn/", function (data) {
+                        var data = data;
+                        var str =  data.hitokoto + " ——  By "       
+                        var options = {
+                          strings: [ 
+                            //str + "Who??^1000",
+                            //str + "It's me^2000",
+                            //str +'Haha, make a joke',
+                            str + data.from,
+                          ],
+                          typeSpeed: 90,
+                          startDelay: 500,
+                          //backDelay: 500,
+                          //backSpeed: 50,//回退速度
+                          //loop: true,
+                        }
+                        typed = new Typed(".hitokoto .typed", options);
+                        })
+                    }
+                }
                 return false;
                 break;
             // next page
